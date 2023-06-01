@@ -1,7 +1,17 @@
 {
-  "name": "my-mantine-app",
-  "version": "0.1.0",
+  "name": "financial-algorithms-examples",
+  "version": "0.1.1",
   "private": true,
+  "homepage": "https://HarrisFauntleroy.github.io/financial-algorithms-examples",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HarrisFauntleroy/financial-algorithms-examples"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Harris Fauntleroy",
+    "url": "https://github.com/HarrisFauntleroy"
+  },
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@mantine/core": "^6.0.13",
