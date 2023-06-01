@@ -1,11 +1,10 @@
-import FinanceChart from './Test';
+import { MantineProvider } from "@mantine/core";
+import FinanceChart from "./Test";
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <FinanceChart/>
-    </div>
+    <MantineProvider withGlobalStyles withNormalizeCSS>
+      <FinanceChart />
+    </MantineProvider>
   );
 }
-
-export default App;
