@@ -1,4 +1,4 @@
-import { Code, Select, Stack, Text } from "@mantine/core";
+import { Code, Stack, Text } from "@mantine/core";
 import {
   CategoryScale,
   Chart,
@@ -8,14 +8,13 @@ import {
 } from "chart.js";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Line } from "react-chartjs-2";
+import { calculatePredictions, getFinancialData } from "./calculations";
 import {
   ExponentialGrowthModel,
   LinearRegressionModel,
   PolynomialRegressionModel,
   PredictionModel,
-  calculatePredictions,
-  getFinancialData,
-} from "./finance";
+} from "./predictionModels";
 
 Chart.register({
   CategoryScale,
@@ -38,24 +37,10 @@ function getModel(model: string | null) {
   return models[model || "linear"];
 }
 
-function getModelDescription(model: string | null): string {
-  const modelDescriptions: Record<string, string> = {
-    linear:
-      "Linear regression is used when data shows a linear trend. The model predicts future data points along this linear line.",
-    exponential:
-      "Exponential growth model is used when data shows exponential growth. It's commonly used in finance, especially in interest and growth scenarios.",
-    polynomial:
-      "Polynomial regression model is used for more complex data trends, which may have multiple fluctuations. It fits a curve to the data points.",
-  };
-
-  return modelDescriptions[model || "linear"];
-}
-
-const FinanceChart = () => {
-  const [isLoading, setLoading] = useState(true);
+const FinanceChart = ({ model }: { model: string | null }) => {
+  const [, setLoading] = useState(true);
   const [financialData, setFinancialData] = useState<DataPoint[]>([]);
   const [predictionData, setPredictionData] = useState<DataPoint[]>([]);
-  const [model, setModel] = useState<string | null>("linear");
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -107,28 +92,24 @@ const FinanceChart = () => {
     [financialData, modelColor, model, predictionData]
   );
 
-  const selectOptions = [
-    { value: "linear", label: "Linear" },
-    { value: "exponential", label: "Exponential" },
-    { value: "polynomial", label: "Polynomial" },
-  ];
+  function getModelDescription(model: string | null): string {
+    const modelDescriptions: Record<string, string> = {
+      linear:
+        "Linear regression is used when data shows a linear trend. The model predicts future data points along this linear line.",
+      exponential:
+        "Exponential growth model is used when data shows exponential growth. It's commonly used in finance, especially in interest and growth scenarios.",
+      polynomial:
+        "Polynomial regression model is used for more complex data trends, which may have multiple fluctuations. It fits a curve to the data points.",
+    };
+
+    return modelDescriptions[model || "linear"];
+  }
 
   return (
-    <Stack p="8px">
-      <Select
-        label="Select Prediction Model"
-        placeholder="Select one"
-        value={model}
-        data={selectOptions}
-        onChange={setModel}
-      />
+    <Stack>
+      <Text>{getModelDescription(model)}</Text>
       <Line data={chartData} />
-      {isLoading ? (
-        <Code>Loading...</Code>
-      ) : (
-        <Text>{getModelDescription(model)}</Text>
-      )}
-      Data: <Code>{JSON.stringify(chartData)}</Code>
+      <Code>{JSON.stringify(chartData)}</Code>
     </Stack>
   );
 };

@@ -1,5 +1,5 @@
 import { MantineProvider } from "@mantine/core";
-import FinanceChart from "./Test";
+import FinanceChart from "./FinancialAlgoPlayground";
 
 export default function App() {
   return (
