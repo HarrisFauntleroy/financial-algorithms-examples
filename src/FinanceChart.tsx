@@ -1,4 +1,4 @@
-import { Card, Code, Select, Text } from "@mantine/core";
+import { Card, Code, Select, Stack, Text } from "@mantine/core";
 import {
   CategoryScale,
   Chart,
@@ -127,17 +127,19 @@ const FinanceChart = ({ model }: { model: string | null }) => {
 
   return (
     <Card maw="100%">
-      <Text>{getModelDescription()}</Text>
-      <Line data={chartData} />
-      <Select
-        label="Select Data Set"
-        placeholder="Select one"
-        value={type}
-        data={selectOptions}
-        onChange={setType}
-      />
-      <Text>{getDataDescription()}</Text>
-      <Code>{JSON.stringify(chartData)}</Code>
+      <Stack>
+        <Text>{getModelDescription()}</Text>
+        <Line data={chartData} />
+        <Select
+          label="Select Data Set"
+          placeholder="Select one"
+          value={type}
+          data={selectOptions}
+          onChange={setType}
+        />
+        <Text>{getDataDescription()}</Text>
+        <Code style={{ overflow: "scroll" }}>{JSON.stringify(chartData)}</Code>
+      </Stack>
     </Card>
   );
 };
