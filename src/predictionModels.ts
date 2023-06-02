@@ -2,7 +2,6 @@
 import {
   add,
   exp,
-  index,
   inv,
   log,
   lusolve,
@@ -11,7 +10,7 @@ import {
   pow,
   transpose,
 } from "mathjs";
-import { DataPoint } from "./FinancialAlgoPlayground";
+import { DataPoint } from "./App";
 import {
   calculateMean,
   calculateSlopeAndYIntercept,
@@ -24,6 +23,8 @@ export interface PredictionModel {
 
 export class LinearRegressionModel implements PredictionModel {
   calculate(data: DataPoint[], futurePoints: number): DataPoint[] {
+    if (!data.length) return [];
+
     const { meanX, meanY } = calculateMean(data);
     const { m, b } = calculateSlopeAndYIntercept(data, meanX, meanY);
     const lastX = data[data.length - 1].x;
@@ -40,7 +41,11 @@ export class PolynomialRegressionModel implements PredictionModel {
   }
 
   calculate(data: DataPoint[], futurePoints: number): DataPoint[] {
+    if (!data.length) return [];
+
     const coefficients = this.calculatePolynomialCoefficients(data);
+    console.log("Coefficients:", coefficients); // Add logging here
+
     const lastX = data[data.length - 1].x;
 
     const predictionData: DataPoint[] = [];
@@ -53,19 +58,18 @@ export class PolynomialRegressionModel implements PredictionModel {
       predictionData.push({ x, y: y as number });
     }
 
+    console.log("Prediction Data:", predictionData); // Add logging here
+
     return predictionData;
   }
 
   private calculatePolynomialCoefficients(data: DataPoint[]): number[] {
-    const X = matrix(Array(data.length).fill(Array(this.degree + 1).fill(0)));
-    const Y = matrix(Array(data.length).fill([0]));
-
-    data.forEach((point, i) => {
-      for (let j = 0; j < this.degree + 1; j++) {
-        X.subset(index(i, j), pow(point.x, j));
-      }
-      Y.subset(index(i, 0), point.y);
-    });
+    const X = matrix(
+      data.map((point) =>
+        Array.from({ length: this.degree + 1 }, (_, j) => Math.pow(point.x, j))
+      )
+    );
+    const Y = matrix(data.map((point) => [point.y]));
 
     // Solve for the coefficients using least squares
     // X.T * X * a = X.T * Y
@@ -81,6 +85,8 @@ export class PolynomialRegressionModel implements PredictionModel {
 
 export class ExponentialGrowthModel implements PredictionModel {
   calculate(data: DataPoint[], futurePoints: number): DataPoint[] {
+    if (!data.length) return [];
+
     const xs = data.map((point) => point.x);
     const ys = data.map((point) => log(point.y));
 

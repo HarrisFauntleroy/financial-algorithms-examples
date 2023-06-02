@@ -1,5 +1,5 @@
 /* eslint-disable import/named */
-import { DataPoint } from "./FinancialAlgoPlayground";
+import { DataPoint } from "./App";
 import { PredictionModel } from "./predictionModels";
 
 export const calculateMean = (
@@ -51,15 +51,51 @@ export const generatePredictions = (
   return predictionData;
 };
 
-export const getFinancialData = async (): Promise<DataPoint[]> => {
+export const getFinancialData = async (
+  type: string | null
+): Promise<DataPoint[]> => {
   try {
-    const data: DataPoint[] = [
-      { x: 1, y: 100 },
-      { x: 2, y: 200 },
-      { x: 3, y: 300 },
-      { x: 4, y: 1000 },
-      { x: 5, y: 10000 },
-    ];
+    let data: DataPoint[] = [];
+
+    switch (type) {
+      case "steadyIncrease":
+        data = [
+          { x: 1, y: 1000 },
+          { x: 2, y: 1200 },
+          { x: 3, y: 1400 },
+          { x: 4, y: 1600 },
+          { x: 5, y: 1800 },
+        ];
+        break;
+
+      case "fluctuatingSavings":
+        data = [
+          { x: 1, y: 1000 },
+          { x: 2, y: 1200 },
+          { x: 3, y: 1100 },
+          { x: 4, y: 1300 },
+          { x: 5, y: 1400 },
+          { x: 6, y: 1600 },
+          { x: 7, y: 1500 },
+          { x: 8, y: 1700 },
+          { x: 9, y: 1800 },
+          { x: 10, y: 2000 },
+        ];
+        break;
+
+      case "exponentialGrowth":
+        data = [
+          { x: 1, y: 100 },
+          { x: 2, y: 200 },
+          { x: 3, y: 300 },
+          { x: 4, y: 1000 },
+          { x: 5, y: 10000 },
+        ];
+        break;
+
+      default:
+        throw new Error(`Invalid data type: ${type}`);
+    }
 
     return new Promise((resolve) => setTimeout(() => resolve(data), 1000));
   } catch (error) {

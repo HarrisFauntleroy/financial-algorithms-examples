@@ -1,4 +1,4 @@
-import { Code, Stack, Text } from "@mantine/core";
+import { Card, Code, Select, Text } from "@mantine/core";
 import {
   CategoryScale,
   Chart,
@@ -41,11 +41,12 @@ const FinanceChart = ({ model }: { model: string | null }) => {
   const [, setLoading] = useState(true);
   const [financialData, setFinancialData] = useState<DataPoint[]>([]);
   const [predictionData, setPredictionData] = useState<DataPoint[]>([]);
+  const [type, setType] = useState<string | null>("steadyIncrease");
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await getFinancialData();
+      const data = await getFinancialData(type);
       setFinancialData(data);
       const futurePredictions = calculatePredictions(data, 5, getModel(model));
       setPredictionData([...data, ...futurePredictions]);
@@ -54,7 +55,7 @@ const FinanceChart = ({ model }: { model: string | null }) => {
     } finally {
       setLoading(false);
     }
-  }, [model]);
+  }, [model, type]);
 
   useEffect(() => {
     fetchData();
@@ -92,7 +93,7 @@ const FinanceChart = ({ model }: { model: string | null }) => {
     [financialData, modelColor, model, predictionData]
   );
 
-  function getModelDescription(model: string | null): string {
+  function getModelDescription(): string {
     const modelDescriptions: Record<string, string> = {
       linear:
         "Linear regression is used when data shows a linear trend. The model predicts future data points along this linear line.",
@@ -105,12 +106,39 @@ const FinanceChart = ({ model }: { model: string | null }) => {
     return modelDescriptions[model || "linear"];
   }
 
+  function getDataDescription(): string {
+    const dataDescriptions: Record<string, string> = {
+      steadyIncrease:
+        "Steady increase data shows a steady increase in value over time. It's a linear trend.",
+      fluctuatingSavings:
+        "Fluctuating savings data shows a linear trend with fluctuations. It's a linear trend with noise.",
+      exponentialGrowth:
+        "Exponential growth data shows exponential growth. It's a exponential trend.",
+    };
+
+    return dataDescriptions[type || "steadyIncrease"];
+  }
+
+  const selectOptions = [
+    { value: "steadyIncrease", label: "Steady Increase" },
+    { value: "fluctuatingSavings", label: "Fluctuating Savings" },
+    { value: "exponentialGrowth", label: "Exponential Growth" },
+  ];
+
   return (
-    <Stack>
-      <Text>{getModelDescription(model)}</Text>
+    <Card maw="100%">
+      <Text>{getModelDescription()}</Text>
       <Line data={chartData} />
+      <Select
+        label="Select Data Set"
+        placeholder="Select one"
+        value={type}
+        data={selectOptions}
+        onChange={setType}
+      />
+      <Text>{getDataDescription()}</Text>
       <Code>{JSON.stringify(chartData)}</Code>
-    </Stack>
+    </Card>
   );
 };
 
