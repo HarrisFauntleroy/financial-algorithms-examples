@@ -67,6 +67,8 @@
     "plugins": [
       "@typescript-eslint",
       "simple-import-sort",
+      "react",
+      "react-hooks",
       "import",
       "sonarjs",
       "jsx-a11y",
@@ -75,6 +77,7 @@
     "extends": [
       "plugin:@typescript-eslint/recommended",
       "eslint:recommended",
+      "plugin:react-hooks/recommended",
       "plugin:import/typescript",
       "plugin:import/recommended",
       "plugin:sonarjs/recommended",
@@ -145,6 +148,7 @@
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-sonarjs": "0.19.0",
     "eslint-plugin-storybook": "^0.6.12",
