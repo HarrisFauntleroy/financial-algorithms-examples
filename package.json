@@ -15,7 +15,6 @@
   "scripts": {
     "build": "react-scripts build",
     "predeploy": "yarn build",
-    "deploy": "gh-pages -d build",
     "eject": "react-scripts eject",
     "format": "prettier --write .",
     "lint": "yarn eslint .",
@@ -153,7 +152,6 @@
     "eslint-plugin-sonarjs": "0.19.0",
     "eslint-plugin-storybook": "^0.6.12",
     "eslint-watch": "^8.0.0",
-    "gh-pages": "^5.0.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.2",
     "prettier": "^2.8.7"
